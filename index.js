@@ -10,7 +10,10 @@ const routeClient = require("./routes/admin/index.route.js");
 const app = express();
 const port = process.env.PORT;
 
-
+// cái này là biến toàn cục có thể chạy trong suốt chương trình -> phục vụ cho đổi tên đường dẫn
+const systemConfig = require("./config/system.js");
+app.locals.prefixAdmin = systemConfig.PREFIX_ADMIN;
+//
 app.set('views' , "./views");
 app.set('view engine' , 'pug');
 app.use(express.static("public"));
