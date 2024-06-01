@@ -1,16 +1,11 @@
+// [GET] /admin/products
 const Product = require("../../models/product.model");
 module.exports.index = async (req ,res) => { 
-    const products = await Product.find({});
-    const newProducts = products.map((item) => {
-        item.priceNew = ((item.price * (100 - item.discountPercentage)) / 100).toFixed(0) ;
-        return item ;
-    })
+    const products = await Product.find({
+        deleted : false
+    }); // đi tìm những bản ghi đi tìm những bản ghi có deleted = false
     res.render("admin/pages/products/index.pug" , {
         pageTitle :"Danh Sach Sản Phẩm",
-        products : newProducts
+        products : products
     });
-}
-
-module.exports.add = (req ,res) => { 
-    res.send("client/pages/products/index.pug");
 }
