@@ -23,10 +23,19 @@ module.exports.index = async (req ,res) => {
         find.status = req.query.status;
       }
       // end lọc theo trạng thái
+
+      // tìm kiếm
+      let keyword = "" ;
+      if(req.query.keyword){
+        find.title = new RegExp(req.query.keyword , "i");
+        keyword = req.query.keyword;
+      }
+      // end tìm kiếm
       const products = await Product.find(find);
     res.render("admin/pages/products/index.pug" , {
         pageTitle :"Danh Sach Sản Phẩm",
         products : products,
-        filterStatus: filterStatus
+        filterStatus: filterStatus ,
+        keyword : keyword
     });
 }

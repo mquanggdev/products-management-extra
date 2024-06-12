@@ -21,3 +21,19 @@ if(listButtonStatus.length > 0) {
 }
 
 // End Button Status
+
+// Tìm kiếm
+const formSearch = document.querySelector("[form-search]");
+formSearch.addEventListener("submit" , (event) => {
+  event.preventDefault();
+  let url = new URL(window.location.href);
+  const keyword = event.target.elements.keyword.value;
+  if ( keyword){
+    url.searchParams.set("keyword" , keyword);
+  }
+  else {
+    url.searchParams.delete("keyword");
+  }
+  window.location.href = url.href;
+})
+// end tìm kiếm
