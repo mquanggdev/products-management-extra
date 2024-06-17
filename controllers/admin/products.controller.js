@@ -1,29 +1,16 @@
 // [GET] /admin/products
 const Product = require("../../models/product.model");
+const filterStatusHelper = require("../../helper/filterStatus.helper")
 module.exports.index = async (req ,res) => {
     const find = {
         deleted: false
       };
     // Lọc theo trạng thái
-      const filterStatus = [
-        {
-          name: "Tất cả",
-          status: "",
-        },
-        {
-          name: "Hoạt động",
-          status: "active",
-        },
-        {
-          name: "Dừng hoạt động",
-          status: "inactive",
-        }
-      ];   
+    const filterStatus = filterStatusHelper(req);
       if(req.query.status) {
         find.status = req.query.status;
       }
       // end lọc theo trạng thái
-
       // tìm kiếm
       let keyword = "" ;
       if(req.query.keyword){
