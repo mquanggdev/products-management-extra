@@ -37,3 +37,22 @@ formSearch.addEventListener("submit" , (event) => {
   window.location.href = url.href;
 })
 // end tìm kiếm
+
+
+// phân trang
+const listButtonPagination = document.querySelectorAll("[button-pagination]");
+if (listButtonPagination.length > 0){
+  let url = new URL(window.location.href)
+  listButtonPagination.forEach(button => {
+    button.addEventListener("click" , () => {
+      const currentPage = button.getAttribute("button-pagination");
+      url.searchParams.set("page" , currentPage);
+      window.location.href = url.href
+    })
+  })
+  const pageCurrent = url.searchParams.get("page");
+  const pageCurrentActive = document.querySelector(`[button-pagination = '${pageCurrent}']`);
+  pageCurrentActive.parentNode.classList.add("active");
+}
+
+// end phân trang
