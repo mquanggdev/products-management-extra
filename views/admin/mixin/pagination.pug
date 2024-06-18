@@ -1,0 +1,15 @@
+mixin pagination(pagination)
+  nav(aria-label='Page navigation example')
+    ul(class="pagination")
+      if(pagination.currentPage > 1)
+        li(class="page-item")
+          button(class="page-link"
+          button-pagination = pagination.currentPage - 1) Previous
+      - for (let i = 1 ; i <= pagination.total ; i++ )
+          li(class="page-item")
+            button(class="page-link"
+            button-pagination = i) #{i}
+      if(pagination.currentPage < pagination.total)
+        li(class="page-item")
+          button(class="page-link"
+          button-pagination = pagination.currentPage + 1) Next

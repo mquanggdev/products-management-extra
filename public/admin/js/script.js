@@ -50,7 +50,7 @@ if (listButtonPagination.length > 0){
       window.location.href = url.href
     })
   })
-  const pageCurrent = url.searchParams.get("page");
+  const pageCurrent = url.searchParams.get("page") || 1;
   const pageCurrentActive = document.querySelector(`[button-pagination = '${pageCurrent}']`);
   pageCurrentActive.parentNode.classList.add("active");
 }

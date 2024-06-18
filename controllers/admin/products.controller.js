@@ -1,6 +1,7 @@
 // [GET] /admin/products
 const Product = require("../../models/product.model");
 const filterStatusHelper = require("../../helper/filterStatus.helper")
+const paginationHelper = require("../../helper/pagination.helper")
 module.exports.index = async (req ,res) => {
     const find = {
         deleted: false
@@ -18,17 +19,9 @@ module.exports.index = async (req ,res) => {
         keyword = req.query.keyword;
       }
       // end tìm kiếm
-
+      const pagination = await paginationHelper(req , find);
       // phân trang
-      const pagination = {
-        currentPage : 1, 
-        limitItems : 4
-      }
-      pagination.currentPage = parseInt(req.query.page);
-      pagination.skip = (pagination.currentPage - 1) * pagination.limitItems
-      const totalProduct = await Product.countDocuments(find);
-      const totalPage = Math.ceil(totalProduct / pagination.limitItems);
-      pagination.total = totalPage
+      
       //end phân trang
       const products = await Product
       .find(find)
