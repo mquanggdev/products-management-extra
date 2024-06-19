@@ -35,3 +35,16 @@ module.exports.index = async (req ,res) => {
         pagination : pagination
     });
 }
+// [Patch] /admin/products/change-status/:id
+module.exports.changeStatusSingle = async (req , res) => {
+  const id = req.params.id;
+  const statusChange = req.body.status;
+  await Product.updateOne({
+    _id: id
+  } , {
+    status:statusChange
+  })
+  res.json({
+    code:200
+  })
+}
