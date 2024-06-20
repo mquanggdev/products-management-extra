@@ -86,3 +86,29 @@ if (listButtonStatusChange.length > 0){
   })
 }
 // end đổi trạng thái
+
+
+// Thay đổi trạng thái nhiều sản phẩm
+const inputCheckAll = document.querySelector("input[name='checkAll']");
+const inputCheckItems = document.querySelectorAll("input[name='checkItem']");
+if(inputCheckAll && inputCheckItems.length > 0){
+  inputCheckAll.addEventListener("click" , () => {
+    inputCheckItems.forEach(input => {
+      input.checked = inputCheckAll.checked
+    })
+  })
+
+  inputCheckItems.forEach(input => {
+    input.addEventListener("click" , () => {
+      const inputCheckedItems = document.querySelectorAll("input[name = 'checkItem']:checked");
+      if(inputCheckedItems.length == inputCheckItems.length){
+        inputCheckAll.checked = true;
+      }
+      else {
+        inputCheckAll.checked = false;
+      }
+    })
+  })
+}
+
+// end thay đổi trạng thái nhiều sản phẩm
