@@ -14,6 +14,17 @@ block main
         .col-6
           +search(keyword)
   .card.mb-3
+    .card-header Chuyển trạng thái
+    .card-body
+      .input-group
+        select(aria-label='Example select with button addon' id = "inputGroupSelect04" class = "custom-select")
+          option(selected='') Chọn trạng thái...
+          option(value='active') Hoạt động
+          option(value='inactive') Dừng hoạt động
+        .input-group-append
+          button.btn.btn-outline-secondary(type='button' class = "button-ChangeMulti") Áp dụng
+
+  .card.mb-3
     .card-header Danh sách
     .card-body
       table.table.table-hover.table-sm
@@ -38,6 +49,7 @@ block main
                 input(
                 type="checkbox"
                 name="checkItem"
+                value=item.id
                 ) 
               td #{index+1}
               td

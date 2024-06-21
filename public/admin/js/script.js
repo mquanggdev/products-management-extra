@@ -1,3 +1,5 @@
+// const { events } = require("../../../models/product.model");
+
 // Button Status
 const listButtonStatus = document.querySelectorAll("[button-status]");
 if(listButtonStatus.length > 0) {
@@ -61,7 +63,6 @@ if (listButtonPagination.length > 0){
 // Đổi trạng thái
 const listButtonStatusChange = document.querySelectorAll("[button-changeStatus]");
 if (listButtonStatusChange.length > 0){
-  console.log(listButtonStatusChange.length);
   listButtonStatusChange.forEach(button => {
     button.addEventListener("click" , () => {
       const statusChange = button.getAttribute("button-changeStatus");
@@ -109,6 +110,43 @@ if(inputCheckAll && inputCheckItems.length > 0){
       }
     })
   })
+  
+
+  const buttonChangeStatus = document.querySelector(".button-ChangeMulti");
+  buttonChangeStatus.addEventListener("click" , (event) => {
+    const inputCheckedItems = document.querySelectorAll("input[name = 'checkItem']:checked");
+    const selectStatus = document.querySelector(".custom-select");
+    const valueStatus = selectStatus.value
+    if ( inputCheckedItems.length > 0 && valueStatus != ""){
+      const ids = [] ;
+      inputCheckedItems.forEach(input => {
+        ids.push(input.value)
+       }
+      )
+      const data = {
+        id : ids ,
+        status : valueStatus
+      }
+
+      fetch("/admin/products/change-multiStatus" , {
+        method:"PATCH" , 
+        headers:{
+          "Content-type" :"application/json"
+        },
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200){
+            window.location.reload();
+          }
+        })
+    }
+    else {
+      alert("Vui lòng chọn sản phẩm và chọn trường trạng thái!")
+    }
+  })
 }
+
 
 // end thay đổi trạng thái nhiều sản phẩm

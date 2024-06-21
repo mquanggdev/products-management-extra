@@ -48,3 +48,9 @@ module.exports.changeStatusSingle = async (req , res) => {
     code:200
   })
 }
+// [Patch] /admin/products/change-multiStatus
+module.exports.changeStatusAll = async (req , res) => {
+  res.json({
+    code:200
+  })
+}
