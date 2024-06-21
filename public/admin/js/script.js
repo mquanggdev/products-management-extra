@@ -127,7 +127,6 @@ if(inputCheckAll && inputCheckItems.length > 0){
         id : ids ,
         status : valueStatus
       }
-
       fetch("/admin/products/change-multiStatus" , {
         method:"PATCH" , 
         headers:{

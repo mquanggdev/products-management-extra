@@ -50,6 +50,12 @@ module.exports.changeStatusSingle = async (req , res) => {
 }
 // [Patch] /admin/products/change-multiStatus
 module.exports.changeStatusAll = async (req , res) => {
+  const data = req.body;
+  await Product.updateMany({
+    _id : data.id
+  },{
+    status:data.status,
+  })
   res.json({
     code:200
   })
