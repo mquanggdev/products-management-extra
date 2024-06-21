@@ -1,0 +1,8 @@
+mixin box-changeStatus(link)
+    div(class="input-group" link=link id="box-changeStatus")
+        select(aria-label='Example select with button addon' id = "inputGroupSelect04" class = "custom-select")
+            option(selected='') Chọn trạng thái...
+            option(value='active') Hoạt động
+            option(value='inactive') Dừng hoạt động
+        .input-group-append
+            button.btn.btn-outline-secondary(type='button' class = "button-ChangeMulti") Áp dụng

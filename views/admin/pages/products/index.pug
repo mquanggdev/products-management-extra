@@ -2,6 +2,7 @@ extends ../../layout/default.pug
 include ../../mixin/filter.pug
 include ../../mixin/search.pug
 include ../../mixin/pagination.pug
+include ../../mixin/box-changeStatus.pug
 block main 
   h1(class="mb-4") Danh sách sản phẩm
 
@@ -16,13 +17,7 @@ block main
   .card.mb-3
     .card-header Chuyển trạng thái
     .card-body
-      .input-group
-        select(aria-label='Example select with button addon' id = "inputGroupSelect04" class = "custom-select")
-          option(selected='') Chọn trạng thái...
-          option(value='active') Hoạt động
-          option(value='inactive') Dừng hoạt động
-        .input-group-append
-          button.btn.btn-outline-secondary(type='button' class = "button-ChangeMulti") Áp dụng
+      +box-changeStatus(`/${prefixAdmin}/products/change-multiStatus`)
 
   .card.mb-3
     .card-header Danh sách

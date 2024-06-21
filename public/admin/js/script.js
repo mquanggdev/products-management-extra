@@ -127,7 +127,10 @@ if(inputCheckAll && inputCheckItems.length > 0){
         id : ids ,
         status : valueStatus
       }
-      fetch("/admin/products/change-multiStatus" , {
+      const divInputGroup = document.querySelector("#box-changeStatus");
+      const linkStatus = divInputGroup.getAttribute("link");
+      console.log(linkStatus);
+      fetch(linkStatus , {
         method:"PATCH" , 
         headers:{
           "Content-type" :"application/json"
