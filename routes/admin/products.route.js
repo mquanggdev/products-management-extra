@@ -6,4 +6,8 @@ router.patch("/change-status/:id" , controller.changeStatusSingle);
 router.patch("/change-multiStatus" , controller.changeStatusAll);
 router.patch("/delete/:id" , controller.deleteProduct);
 router.patch("/delete-multiProduct",controller.deleteMultiProduct)
+router.get("/trash",controller.trash)
+router.delete("/trash/permanentlyDelete/:id",controller.permanentlyDelete)
+router.patch("/trash/restore/:id",controller.restore)
+router.patch("/trash/deleteAndRestore",controller.deleteAndRestore)
 module.exports = router;

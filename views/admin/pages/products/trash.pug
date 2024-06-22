@@ -1,0 +1,87 @@
+extends ../../layout/default.pug
+include ../../mixin/filter.pug
+include ../../mixin/search.pug
+include ../../mixin/pagination.pug
+include ../../mixin/box-changeStatus.pug
+include ../../mixin/box-deleteProducts.pug
+block main 
+  h1(class="mb-4") Danh sách sản phẩm bị xóa
+  .card.mb-3
+    .card-header Bộ lọc và Tìm kiếm
+    .card-body
+      .row
+        .col-6
+          +filter(filterStatus)
+        .col-6
+          +search(keyword)
+  .card.mb-3
+    .card-header Tác Vụ
+    .card-body
+        .row
+            .col-6
+                +box-changeStatus(`/${prefixAdmin}/products/change-multiStatus`)
+            .col-6
+                div(class="input-group")
+                    select(aria-label='Example select with button addon' id = "selectTrash" class = "custom-select")
+                        option(selected='') Xóa Và Khôi Phục...
+                        option(value='permanentlyDelete') Xóa Vĩnh Viễn
+                        option(value='restore') Khôi Phục
+                    .input-group-append
+                        button.btn.btn-outline-secondary(type='button' class="button-DeleteAndRestore") Áp dụng
+  .card.mb-3
+    .card-header Danh sách
+    .card-body
+      table.table.table-hover.table-sm
+        thead
+          tr
+            th
+              input(
+              type="checkbox"
+              name="checkAll"
+              )
+            th STT
+            th Hình ảnh
+            th Tiêu đề
+            th Giá
+            th Trạng thái
+            th Hành động
+
+        tbody
+          each item,index in products
+            tr
+              td
+                input(
+                type="checkbox"
+                name="checkItem"
+                value=item.id
+                ) 
+              td #{index+1}
+              td
+                img(
+                  src=item.thumbnail
+                  alt=item.title
+                  width="100px"
+                  height="auto"
+                )
+              td #{item.title}
+              td #{item.price}$
+              td
+                if(item.status == "active")
+                  button(
+                    link = `/${prefixAdmin}/products/change-status/${item.id}`
+                    class="badge badge-success"
+                    button-changeStatus = "inactive"
+                    ) Hoạt động
+                else
+                  button(
+                    link = `/${prefixAdmin}/products/change-status/${item.id}`
+                    class="badge badge-danger"
+                    button-changeStatus = "active"
+                  ) Dừng hoạt động
+              td
+                button(class="btn btn-warning btn-sm"
+                 button-restoreSingle = `/${prefixAdmin}/products/trash/restore/${item.id}` ) Khôi phục
+                button(
+                  class="btn btn-danger btn-sm ml-1"
+                   button-permanentlyDelete = `/${prefixAdmin}/products/trash/permanentlyDelete/${item.id}`) Xóa Vĩnh Viễn
+  +pagination(pagination)

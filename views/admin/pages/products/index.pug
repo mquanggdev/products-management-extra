@@ -23,6 +23,9 @@ block main
           +box-changeStatus(`/${prefixAdmin}/products/change-multiStatus`)
         .col-4
           +box-deleteProducts(`/${prefixAdmin}/products/delete-multiProduct`)
+  .row
+    div(class="col-2 mb-3")  
+      a(href=`/${prefixAdmin}/products/trash` class="btn btn-outline-secondary") Thùng Rác
   .card.mb-3
     .card-header Danh sách
     .card-body

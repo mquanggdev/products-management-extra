@@ -52,9 +52,6 @@ if (listButtonPagination.length > 0){
       window.location.href = url.href
     })
   })
-  const pageCurrent = url.searchParams.get("page") || 1;
-  const pageCurrentActive = document.querySelector(`[button-pagination = '${pageCurrent}']`);
-  pageCurrentActive.parentNode.classList.add("active");
 }
 
 // end phân trang
@@ -115,7 +112,7 @@ if(inputCheckAll && inputCheckItems.length > 0){
   const buttonChangeStatus = document.querySelector(".button-ChangeMulti");
   buttonChangeStatus.addEventListener("click" , (event) => {
     const inputCheckedItems = document.querySelectorAll("input[name = 'checkItem']:checked");
-    const selectStatus = document.querySelector(".custom-select");
+    const selectStatus = document.querySelector("#inputGroupSelect04");
     const valueStatus = selectStatus.value
     if ( inputCheckedItems.length > 0 && valueStatus != ""){
       const ids = [] ;
@@ -152,26 +149,31 @@ if(inputCheckAll && inputCheckItems.length > 0){
 // end thay đổi trạng thái nhiều sản phẩm
 
 // Xóa sản phẩm - bao gồm xóa vĩnh viễn và xóa mềm
-const buttonDelete = document.querySelector("[button-delete]");
-buttonDelete.addEventListener("click" , () => {
-  const link = buttonDelete.getAttribute("button-delete");
-  fetch(link , {
-    method:"PATCH" , 
-    headers:{
-      "Content-type" :"application/json"
-    }
+const buttonDelete = document.querySelectorAll("[button-delete]");
+if(buttonDelete.length > 0){
+  buttonDelete.forEach(item => {
+    item.addEventListener("click" , () => {
+      const link = item.getAttribute("button-delete");
+      fetch(link , {
+        method:"PATCH" , 
+        headers:{
+          "Content-type" :"application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.code == 200){
+          window.location.reload();
+        }
+      })
+    })
   })
-  .then(res => res.json())
-  .then(data => {
-    if(data.code == 200){
-      window.location.reload();
-    }
-  })
-})
+  }
 // End Xóa sản phẩm
 
 // xóa nhiều sản phẩm
 const buttonDeleteMulti = document.querySelector("[button-deleteMulti]")
+if(buttonDeleteMulti){
 buttonDeleteMulti.addEventListener("click" , () => {
   const link = buttonDeleteMulti.getAttribute("button-deleteMulti");
   const inputCheckedItems = document.querySelectorAll("input[name = 'checkItem']:checked");
@@ -200,4 +202,85 @@ buttonDeleteMulti.addEventListener("click" , () => {
   }
   
 })
+}
 // end xóa nhiều sản phẩm
+
+
+// Thùng rác
+const  buttonRestoreSingle = document.querySelectorAll("[button-restoreSingle]");
+if(buttonRestoreSingle.length > 0){
+  buttonRestoreSingle.forEach(item => {
+    item.addEventListener("click" , () => {
+      const link = item.getAttribute("button-restoreSingle");
+      fetch(link , {
+        method:"PATCH" , 
+        headers:{
+          "Content-type" :"application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.code == 200){
+          window.location.reload();
+        }
+      })
+    })
+  })
+}
+
+const buttonPermanentlyDelete = document.querySelectorAll("[button-permanentlyDelete]");
+if(buttonPermanentlyDelete.length > 0){
+  buttonPermanentlyDelete.forEach(item => {
+    item.addEventListener("click" , () => {
+      const link = item.getAttribute("button-permanentlyDelete");
+      fetch(link , {
+        method:"DELETE" , 
+        headers:{
+          "Content-type" :"application/json"
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.code == 200){
+          window.location.reload();
+        }
+      })
+    })
+  })
+}
+
+const buttonDeleteAndRestore = document.querySelector(".button-DeleteAndRestore");
+if(buttonDeleteAndRestore){
+  buttonDeleteAndRestore.addEventListener("click" , () =>{
+    const selectTrash = document.querySelector("#selectTrash");
+    const inputCheckedItems = document.querySelectorAll("input[name = 'checkItem']:checked");
+    if(inputCheckedItems.length > 0 && selectTrash != ""){
+      let ids = [];
+      const valueSelected = selectTrash.value;
+      inputCheckedItems.forEach(item => {
+        ids.push(item.value);
+      })
+      const data = {
+        id:ids,
+        task:valueSelected
+      }
+      fetch("/admin/products/trash/deleteAndRestore" , {
+            method:"PATCH" , 
+            headers:{
+              "Content-type" :"application/json"
+            },
+            body:JSON.stringify(data)
+          })
+          .then(res => res.json())
+          .then(data => {
+            if(data.code == 200){
+              window.location.reload();
+            }
+          })
+        }
+    else{
+      alert("Vui lòng chọn các sản phẩm cần xóa hoặc khôi phục")
+    }
+  })
+}
+// end thùng rác
