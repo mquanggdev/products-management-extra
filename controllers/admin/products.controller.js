@@ -72,3 +72,15 @@ module.exports.deleteProduct = async (req , res) => {
     code:200
   })
 }
+// [patch] / admin/products/delete-multiProduct
+module.exports.deleteMultiProduct = async (req , res) => {
+  const data = req.body;
+  await Product.updateMany({
+    _id : data.id
+  },{
+    deleted:true
+  })
+  res.json({
+    code:200
+  })
+}

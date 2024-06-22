@@ -154,8 +154,8 @@ if(inputCheckAll && inputCheckItems.length > 0){
 // Xóa sản phẩm - bao gồm xóa vĩnh viễn và xóa mềm
 const buttonDelete = document.querySelector("[button-delete]");
 buttonDelete.addEventListener("click" , () => {
-  const id = buttonDelete.getAttribute("button-delete");
-  fetch(`/admin/products/delete/${id}` , {
+  const link = buttonDelete.getAttribute("button-delete");
+  fetch(link , {
     method:"PATCH" , 
     headers:{
       "Content-type" :"application/json"
@@ -169,3 +169,35 @@ buttonDelete.addEventListener("click" , () => {
   })
 })
 // End Xóa sản phẩm
+
+// xóa nhiều sản phẩm
+const buttonDeleteMulti = document.querySelector("[button-deleteMulti]")
+buttonDeleteMulti.addEventListener("click" , () => {
+  const link = buttonDeleteMulti.getAttribute("button-deleteMulti");
+  const inputCheckedItems = document.querySelectorAll("input[name = 'checkItem']:checked");
+  if ( inputCheckedItems.length > 0){
+    const ids = [] ;
+    inputCheckedItems.forEach(item => {
+      ids.push(item.value)
+      }
+    )
+    fetch(link , {
+      method:"PATCH" , 
+      headers:{
+        "Content-type" :"application/json"
+      },
+      body:JSON.stringify({id:ids})
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data.code == 200){
+        window.location.reload();
+      }
+    })
+  }
+  else{
+    alert("Vui lòng chọn các sản phẩm cần xóa")
+  }
+  
+})
+// end xóa nhiều sản phẩm

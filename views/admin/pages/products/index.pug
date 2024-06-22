@@ -3,6 +3,7 @@ include ../../mixin/filter.pug
 include ../../mixin/search.pug
 include ../../mixin/pagination.pug
 include ../../mixin/box-changeStatus.pug
+include ../../mixin/box-deleteProducts.pug
 block main 
   h1(class="mb-4") Danh sách sản phẩm
 
@@ -15,10 +16,13 @@ block main
         .col-6
           +search(keyword)
   .card.mb-3
-    .card-header Chuyển trạng thái
+    .card-header Tác Vụ
     .card-body
-      +box-changeStatus(`/${prefixAdmin}/products/change-multiStatus`)
-
+      .row
+        .col-4
+          +box-changeStatus(`/${prefixAdmin}/products/change-multiStatus`)
+        .col-4
+          +box-deleteProducts(`/${prefixAdmin}/products/delete-multiProduct`)
   .card.mb-3
     .card-header Danh sách
     .card-body
@@ -73,5 +77,5 @@ block main
                 button(class="btn btn-warning btn-sm") Sửa
                 button(
                   class="btn btn-danger btn-sm ml-1"
-                  button-delete=item.id) Xóa
+                  button-delete=`/${prefixAdmin}/products/delete/${item.id}`) Xóa
   +pagination(pagination)
