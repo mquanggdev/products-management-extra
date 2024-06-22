@@ -149,6 +149,23 @@ if(inputCheckAll && inputCheckItems.length > 0){
     }
   })
 }
-
-
 // end thay đổi trạng thái nhiều sản phẩm
+
+// Xóa sản phẩm - bao gồm xóa vĩnh viễn và xóa mềm
+const buttonDelete = document.querySelector("[button-delete]");
+buttonDelete.addEventListener("click" , () => {
+  const id = buttonDelete.getAttribute("button-delete");
+  fetch(`/admin/products/delete/${id}` , {
+    method:"PATCH" , 
+    headers:{
+      "Content-type" :"application/json"
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.code == 200){
+      window.location.reload();
+    }
+  })
+})
+// End Xóa sản phẩm

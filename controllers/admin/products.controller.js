@@ -60,3 +60,15 @@ module.exports.changeStatusAll = async (req , res) => {
     code:200
   })
 }
+// [patch] / admin/products/delete/:id
+module.exports.deleteProduct = async (req , res) => {
+  const id = req.params.id;
+  await Product.updateOne({
+    _id : id
+  },{
+    deleted:true
+  })
+  res.json({
+    code:200
+  })
+}
