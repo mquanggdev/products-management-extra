@@ -27,6 +27,9 @@ module.exports.index = async (req ,res) => {
       .find(find)
       .limit(pagination.limitItems)
       .skip(pagination.skip)
+      .sort({
+        position:"desc"
+      })
     res.render("admin/pages/products/index.pug" , {
         pageTitle :"Danh Sach Sản Phẩm",
         products : products,
@@ -84,6 +87,26 @@ module.exports.deleteMultiProduct = async (req , res) => {
     code:200
   })
 }
+module.exports.changePosition = async (req , res) => {
+  const id = req.params.id;
+  const position = req.body.position;
+
+  await Product.updateOne({
+    _id: id
+  }, {
+    position: position
+  });
+  res.json({
+    code:200
+  })
+}
+
+
+
+
+
+
+
 //[get]/admin/products/trash
 module.exports.trash = async (req,res) => {
   const find = {

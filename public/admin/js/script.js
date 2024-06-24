@@ -206,6 +206,33 @@ buttonDeleteMulti.addEventListener("click" , () => {
 // end xóa nhiều sản phẩm
 
 
+// Thay đổi vị trí
+const listChangePosition = document.querySelectorAll("input[name='position']");
+if(listChangePosition.length > 0) {
+  listChangePosition.forEach(item => {
+    item.addEventListener("change" , ()=> {
+      const link = item.getAttribute("link");
+      const valuePosition = parseInt(item.value);
+      fetch(link , {
+        method:"PATCH" , 
+        headers:{
+          "Content-type" :"application/json"
+        },
+        body:JSON.stringify({
+          position:valuePosition}
+        )
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200){
+            console.log(data);
+          }
+        })
+    })
+  })
+}
+// end thay đổi vị trí 
+
 // Thùng rác
 const  buttonRestoreSingle = document.querySelectorAll("[button-restoreSingle]");
 if(buttonRestoreSingle.length > 0){
