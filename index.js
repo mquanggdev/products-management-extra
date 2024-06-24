@@ -11,10 +11,13 @@ var bodyParser = require('body-parser')
 // cái này là biến toàn cục có thể chạy trong suốt chương trình -> phục vụ cho đổi tên đường dẫn
 const systemConfig = require("./config/system.js");
 app.locals.prefixAdmin = systemConfig.PREFIX_ADMIN;
+//flash
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-
+//slug
+var slug = require('mongoose-slug-updater');
+mongoose.plugin(slug);
 
 
 app.set('views' , "./views");
