@@ -2,6 +2,7 @@
 const Product = require("../../models/product.model");
 const filterStatusHelper = require("../../helper/filterStatus.helper")
 const paginationHelper = require("../../helper/pagination.helper")
+const systemConfig = require("../../config/system.js");
 module.exports.index = async (req ,res) => {
     const find = {
         deleted: false
@@ -47,6 +48,7 @@ module.exports.changeStatusSingle = async (req , res) => {
   } , {
     status:statusChange
   })
+  req.flash('success', 'Cập nhật trạng thái thành công!');
   res.json({
     code:200
   })
@@ -59,6 +61,7 @@ module.exports.changeStatusAll = async (req , res) => {
   },{
     status:data.status,
   })
+  req.flash('success', 'Cập nhật trạng thái thành công!');
   res.json({
     code:200
   })
@@ -71,6 +74,7 @@ module.exports.deleteProduct = async (req , res) => {
   },{
     deleted:true
   })
+  req.flash('success', 'Xóa sản phẩm thành công!');
   res.json({
     code:200
   })
@@ -83,6 +87,7 @@ module.exports.deleteMultiProduct = async (req , res) => {
   },{
     deleted:true
   })
+  req.flash('success', 'Xóa sản phẩm thành công!');
   res.json({
     code:200
   })
@@ -100,8 +105,25 @@ module.exports.changePosition = async (req , res) => {
     code:200
   })
 }
-
-
+module.exports.create = async (req , res) => {
+  res.render("admin/pages/products/create" , {
+    pageTitle:"Thêm sản phẩm mới"
+  })
+}
+module.exports.createPost =  async (req , res) => {
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+  if(req.body.position) {
+    req.body.position = parseInt(req.body.position);
+  } else {
+    const countProducts = await Product.countDocuments({});
+    req.body.position = countProducts + 1;
+  }
+  const newProduct = new Product(req.body);
+  await newProduct.save();
+  res.redirect(`/${systemConfig.PREFIX_ADMIN}/products`);
+}
 
 
 

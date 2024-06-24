@@ -7,6 +7,8 @@ router.patch("/change-multiStatus" , controller.changeStatusAll);
 router.patch("/delete/:id" , controller.deleteProduct);
 router.patch("/delete-multiProduct",controller.deleteMultiProduct)
 router.patch("/change-position/:id" ,controller.changePosition)
+router.get("/create",controller.create);
+router.post("/create" ,controller.createPost)
 
 
 router.get("/trash",controller.trash)

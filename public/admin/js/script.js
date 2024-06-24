@@ -233,6 +233,22 @@ if(listChangePosition.length > 0) {
 }
 // end thay đổi vị trí 
 
+// show-alert
+const showAlert = document.querySelector("[show-alert]");
+if(showAlert) {
+  let time = showAlert.getAttribute("show-alert") || 3000;
+  time = parseInt(time);
+
+  setTimeout(() => {
+    showAlert.classList.add("hidden");
+  }, time);
+}
+// end show-alert
+
+
+
+
+
 // Thùng rác
 const  buttonRestoreSingle = document.querySelectorAll("[button-restoreSingle]");
 if(buttonRestoreSingle.length > 0){

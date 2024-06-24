@@ -11,12 +11,27 @@ var bodyParser = require('body-parser')
 // cái này là biến toàn cục có thể chạy trong suốt chương trình -> phục vụ cho đổi tên đường dẫn
 const systemConfig = require("./config/system.js");
 app.locals.prefixAdmin = systemConfig.PREFIX_ADMIN;
-//
+const flash = require('express-flash');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+
+
+
 app.set('views' , "./views");
 app.set('view engine' , 'pug');
 app.use(express.static("public"));
 // parse application/json
 app.use(bodyParser.json())
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+
+// Flash
+app.use(cookieParser('Yalidas'));
+app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(flash());
+// End Flash
 
 
 // Route
