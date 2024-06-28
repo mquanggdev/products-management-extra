@@ -26,7 +26,8 @@ if(listButtonStatus.length > 0) {
 
 // Tìm kiếm
 const formSearch = document.querySelector("[form-search]");
-formSearch.addEventListener("submit" , (event) => {
+if(formSearch){
+  formSearch.addEventListener("submit" , (event) => {
   event.preventDefault();
   let url = new URL(window.location.href);
   const keyword = event.target.elements.keyword.value;
@@ -38,6 +39,8 @@ formSearch.addEventListener("submit" , (event) => {
   }
   window.location.href = url.href;
 })
+}
+
 // end tìm kiếm
 
 
@@ -245,7 +248,20 @@ if(showAlert) {
 }
 // end show-alert
 
+// Upload Image
+const uploadImage = document.querySelector("[upload-image]");
+if(uploadImage) {
+  const uploadImageInput = uploadImage.querySelector("[upload-image-input]");
+  const uploadImagePreview = uploadImage.querySelector("[upload-image-preview]");
 
+  uploadImageInput.addEventListener("change", () => {
+    const file = uploadImageInput.files[0];
+    if(file) {
+      uploadImagePreview.src = URL.createObjectURL(file);
+    }
+  });
+}
+// End Upload Image
 
 
 
