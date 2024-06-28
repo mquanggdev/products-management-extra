@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const multer  = require('multer')
 const controller = require("../../controllers/admin/products.controller")
+const storageMulterHelper = require("../../helper/storageMulter.helper")
+const upload = multer({ storage: storageMulterHelper })
+
+
 router.get("/" , controller.index);
 router.patch("/change-status/:id" , controller.changeStatusSingle);
 router.patch("/change-multiStatus" , controller.changeStatusAll);
@@ -8,8 +13,7 @@ router.patch("/delete/:id" , controller.deleteProduct);
 router.patch("/delete-multiProduct",controller.deleteMultiProduct)
 router.patch("/change-position/:id" ,controller.changePosition)
 router.get("/create",controller.create);
-router.post("/create" ,controller.createPost)
-
+router.post("/create", upload.single('thumbnail'),controller.createPost)
 
 router.get("/trash",controller.trash)
 router.delete("/trash/permanentlyDelete/:id",controller.permanentlyDelete)

@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose")
 require("dotenv").config();
 // console.log(process.env.PORT); // process.env nó sẽ trả ra những biến mà ta lưu trong env -> nó sẽ trả dưới dạng 1 object
 const database = require("./config/database.js"); // lấy dữ liệu từ mongodb
