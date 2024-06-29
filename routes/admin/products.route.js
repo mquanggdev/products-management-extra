@@ -4,6 +4,7 @@ const multer  = require('multer')
 const controller = require("../../controllers/admin/products.controller")
 const storageMulterHelper = require("../../helper/storageMulter.helper")
 const upload = multer({ storage: storageMulterHelper })
+const validate = require("../../validate/admin/products.validate")
 
 
 router.get("/" , controller.index);
@@ -13,7 +14,7 @@ router.patch("/delete/:id" , controller.deleteProduct);
 router.patch("/delete-multiProduct",controller.deleteMultiProduct)
 router.patch("/change-position/:id" ,controller.changePosition)
 router.get("/create",controller.create);
-router.post("/create", upload.single('thumbnail'),controller.createPost)
+router.post("/create", upload.single('thumbnail'),validate.creatPost,controller.createPost)
 
 router.get("/trash",controller.trash)
 router.delete("/trash/permanentlyDelete/:id",controller.permanentlyDelete)

@@ -1,3 +1,4 @@
+include ../mixin/alert.pug
 doctype html
 html(lang="en")
     head
@@ -8,6 +9,8 @@ html(lang="en")
         link(rel="stylesheet", href="/admin/css/style.css")
         link(rel="stylesheet", href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css")
     body
+        +alert-success(3000)
+        +alert-error(3000)
         include ../partials/header.pug
         .body
             include ../partials/sider.pug
