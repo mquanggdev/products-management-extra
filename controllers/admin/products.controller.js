@@ -41,7 +41,8 @@ module.exports.index = async (req ,res) => {
 }
 // [Patch] /admin/products/change-status/:id
 module.exports.changeStatusSingle = async (req , res) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
   const statusChange = req.body.status;
   await Product.updateOne({
     _id: id
@@ -52,9 +53,13 @@ module.exports.changeStatusSingle = async (req , res) => {
   res.json({
     code:200
   })
+  } catch (error) {
+    res.redirect(`${systemConfig.PREFIX_ADMIN}/products`)
+  }
 }
 // [Patch] /admin/products/change-multiStatus
 module.exports.changeStatusAll = async (req , res) => {
+ try {
   const data = req.body;
   await Product.updateMany({
     _id : data.id
@@ -65,10 +70,14 @@ module.exports.changeStatusAll = async (req , res) => {
   res.json({
     code:200
   })
+ } catch (error) {
+  res.redirect(`${systemConfig.PREFIX_ADMIN}/products`)
+ }
 }
 // [patch] / admin/products/delete/:id
 module.exports.deleteProduct = async (req , res) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
   await Product.updateOne({
     _id : id
   },{
@@ -78,9 +87,13 @@ module.exports.deleteProduct = async (req , res) => {
   res.json({
     code:200
   })
+  } catch (error) {
+    res.redirect(`${systemConfig.PREFIX_ADMIN}/products`)
+  }
 }
 // [patch] / admin/products/delete-multiProduct
 module.exports.deleteMultiProduct = async (req , res) => {
+ try {
   const data = req.body;
   await Product.updateMany({
     _id : data.id
@@ -91,9 +104,14 @@ module.exports.deleteMultiProduct = async (req , res) => {
   res.json({
     code:200
   })
+ } catch (error) {
+  res.redirect(`${systemConfig.PREFIX_ADMIN}/products`)
+ }
 }
+// [patch] / admin/products/change-position
 module.exports.changePosition = async (req , res) => {
-  const id = req.params.id;
+  try {
+    const id = req.params.id;
   const position = req.body.position;
 
   await Product.updateOne({
@@ -104,14 +122,20 @@ module.exports.changePosition = async (req , res) => {
   res.json({
     code:200
   })
+  } catch (error) {
+    res.redirect(`${systemConfig.PREFIX_ADMIN}/products`)
+  }
 }
+//[get]/admin/products/create
 module.exports.create = async (req , res) => {
   res.render("admin/pages/products/create" , {
     pageTitle:"Thêm sản phẩm mới"
   })
 }
+//[post]/admin/products/create
 module.exports.createPost =  async (req , res) => {
-  console.log(req.file);
+  try {
+    console.log(req.file);
   if(req.file && req.file.filename){
     req.body.thumbnail = `/uploads/${req.file.filename}`
   }
@@ -127,9 +151,62 @@ module.exports.createPost =  async (req , res) => {
   const newProduct = new Product(req.body);
   await newProduct.save();
   req.flash("success" ,"Thêm sản phẩm thành công");
+  } catch (error) {
+    console.log(error);
+  }
   res.redirect(`/${systemConfig.PREFIX_ADMIN}/products`);
 }
+//[get]/admin/products/edit/:id
+module.exports.edit = async (req , res) => {
+  try {
+    const id = req.params.id;
+    const product = await Product.findOne({
+      _id:id,
+      deleted:false
+    })
+    if(product){
+      res.render("admin/pages/products/edit" , {
+        pageTitle:"Sửa sản phẩm",
+        product:product
+      })
+    }else{
+      res.redirect(`${systemConfig.PREFIX_ADMIN}/products`)
+    }
+    
+  } catch (error) {
+    res.redirect(`${systemConfig.PREFIX_ADMIN}/products`)
+  }
+  
+}
+//[post]/admin/products/edit/:id
+module.exports.editPatch =  async (req , res) => {
+  try {
+    const id = req.params.id;
+    if(req.file && req.file.filename){
+      req.body.thumbnail = `/uploads/${req.file.filename}`
+    }
+    req.body.price = parseInt(req.body.price);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.stock = parseInt(req.body.stock);
+    if(req.body.position) {
+      req.body.position = parseInt(req.body.position);
+    } else {
+      const countProducts = await Product.countDocuments({});
+      req.body.position = countProducts + 1;
+    }
 
+    await Product.updateOne({
+      _id:id,
+      deleted:false
+    },req.body)
+
+    req.flash("success" ,"Sửa sản phẩm thành công");
+  } catch (error) {
+    req.flash("error" ,"Id không hợp lệ");
+  }
+  
+  res.redirect(`back`);
+}
 
 
 
@@ -168,8 +245,9 @@ res.render("admin/pages/products/trash.pug" , {
     pagination : pagination
 });
 }
-//[delete]/admin/products/trash/permanentlyDelete
+//[delete]/admin/products/trash/permanentlyDelete/:id
 module.exports.permanentlyDelete = async (req , res) => {
+try {
   const id = req.params.id;
   await Product.deleteOne({
     _id : id
@@ -177,24 +255,32 @@ module.exports.permanentlyDelete = async (req , res) => {
   res.json({
     code:200
   })
+  } catch (error) {
+  console.log(error);
+}
 }
 
-//[patch]/admin/products/trash/restore
+//[patch]/admin/products/trash/restore/:id
 module.exports.restore = async (req , res) => {
-  const id = req.params.id;
-  await Product.updateOne({
-    _id : id
-  },{
-    deleted:false
-  })
-  res.json({
-    code:200
-  })
+try {
+    const id = req.params.id;
+    await Product.updateOne({
+      _id : id
+    },{
+      deleted:false
+    })
+    res.json({
+      code:200
+    })
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 //patch]/admin/products/trash/deleteAndRestore
 module.exports.deleteAndRestore = async (req , res) => {
-  const {id,task} = req.body;
+  try {
+    const {id,task} = req.body;
   switch (task) {
     case "permanentlyDelete":
       await Product.deleteMany({
@@ -212,4 +298,7 @@ module.exports.deleteAndRestore = async (req , res) => {
   res.json({
     code:200
   })
+  } catch (error) {
+    console.log(error);
+  }
 }

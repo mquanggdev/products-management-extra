@@ -15,6 +15,8 @@ router.patch("/delete-multiProduct",controller.deleteMultiProduct)
 router.patch("/change-position/:id" ,controller.changePosition)
 router.get("/create",controller.create);
 router.post("/create", upload.single('thumbnail'),validate.creatPost,controller.createPost)
+router.get("/edit/:id",controller.edit)
+router.patch("/edit/:id" ,upload.single('thumbnail'),validate.creatPost,controller.editPatch)
 
 router.get("/trash",controller.trash)
 router.delete("/trash/permanentlyDelete/:id",controller.permanentlyDelete)

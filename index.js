@@ -19,6 +19,7 @@ const session = require('express-session');
 //slug
 var slug = require('mongoose-slug-updater');
 mongoose.plugin(slug);
+var methodOverride = require('method-override')
 
 
 app.set('views' , "./views");
@@ -36,7 +37,7 @@ app.use(cookieParser('Yalidas'));
 app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 // End Flash
-
+app.use(methodOverride('_method'))
 
 // Route
 routeClient(app);
