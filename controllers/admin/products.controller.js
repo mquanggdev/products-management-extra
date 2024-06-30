@@ -20,17 +20,24 @@ module.exports.index = async (req ,res) => {
         keyword = req.query.keyword;
       }
       // end tìm kiếm
-      const pagination = await paginationHelper(req , find);
-      // phân trang
       
+      // phân trang
+      const pagination = await paginationHelper(req , find);
       //end phân trang
+
+
+      //sort
+      const sort = {}
+      if(req.query.sortKey && req.query.sortValue){
+        sort[req.query.sortKey] = req.query.sortValue
+      }
+      // end sort
+
       const products = await Product
       .find(find)
       .limit(pagination.limitItems)
       .skip(pagination.skip)
-      .sort({
-        position:"desc"
-      })
+      .sort(sort)
     res.render("admin/pages/products/index.pug" , {
         pageTitle :"Danh Sach Sản Phẩm",
         products : products,

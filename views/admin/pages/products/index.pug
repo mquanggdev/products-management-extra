@@ -4,6 +4,7 @@ include ../../mixin/search.pug
 include ../../mixin/pagination.pug
 include ../../mixin/box-changeStatus.pug
 include ../../mixin/box-deleteProducts.pug
+include ../../mixin/sort.pug
 block main 
 
   h1(class="mb-4") Danh sách sản phẩm
@@ -23,19 +24,25 @@ block main
         .col-4
           +box-changeStatus(`/${prefixAdmin}/products/change-multiStatus`)
         .col-4
-          +box-deleteProducts(`/${prefixAdmin}/products/delete-multiProduct`)
-  .row
-    div(class="col-2 mb-3")  
-      a(href=`/${prefixAdmin}/products/trash` class="btn btn-outline-secondary") Thùng Rác
+          +box-deleteProducts(`/${prefixAdmin}/products/delete-multiProduct`)          
+  .card.mb-3
+    .card-header Sắp xếp
+    .card-body
+      .row
+        .col-4
+          +sort()
   .card.mb-3
     .card-header Danh sách
     .card-body
-      div(class="text-right mb-2")
-        a(
-          href=`/${prefixAdmin}/products/create`
-          class="btn btn-outline-success"
-        ) + Thêm mới
-
+      .row
+        .col-2
+            a(href=`/${prefixAdmin}/products/trash` class="btn btn-outline-success") - Thùng Rác
+        .col-2
+            a(
+              href=`/${prefixAdmin}/products/create`
+              class="btn btn-outline-success"
+            ) + Thêm mới
+    .card-body
       table.table.table-hover.table-sm
         thead
           tr
