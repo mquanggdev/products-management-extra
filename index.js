@@ -20,6 +20,7 @@ const session = require('express-session');
 var slug = require('mongoose-slug-updater');
 mongoose.plugin(slug);
 var methodOverride = require('method-override')
+var path = require('path');
 
 
 app.set('views' , `${__dirname}/views`);
@@ -38,6 +39,9 @@ app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 // End Flash
 app.use(methodOverride('_method'))
+
+//timy
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 
 // Route
 routeClient(app);
