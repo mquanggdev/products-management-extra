@@ -19,6 +19,21 @@ module.exports.index = async (req ,res) => { // đặt tên cho cái export đó
     });
 }
 
-module.exports.add = (req ,res) => { 
-    res.send("client/pages/products/index.pug");
+module.exports.detail = async (req ,res) => {
+    const slug = req.params.slug;
+    const product = await Product.findOne({
+        slug:slug,
+        deleted:false,
+        status:"active"
+    })
+    if(product){
+        res.render("client/pages/products/detail.pug" , {
+            pageTitle :"Trang chi tiết sản phẩm",
+            product: product
+        });
+    }
+    else{
+        res.redirect("back");
+    }
+    
 }
