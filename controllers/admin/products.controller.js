@@ -1,8 +1,11 @@
 // [GET] /admin/products
 const Product = require("../../models/product.model");
+const ProductCategory = require("../../models/products-category.model");
 const filterStatusHelper = require("../../helper/filterStatus.helper")
 const paginationHelper = require("../../helper/pagination.helper")
 const systemConfig = require("../../config/system.js");
+const createTreeHelper = require("../../helper/createTreeCategory.helper");
+
 module.exports.index = async (req ,res) => {
     const find = {
         deleted: false
@@ -30,6 +33,9 @@ module.exports.index = async (req ,res) => {
       const sort = {}
       if(req.query.sortKey && req.query.sortValue){
         sort[req.query.sortKey] = req.query.sortValue
+      }
+      else{
+        sort["position"] = "desc"
       }
       // end sort
 
@@ -135,17 +141,19 @@ module.exports.changePosition = async (req , res) => {
 }
 //[get]/admin/products/create
 module.exports.create = async (req , res) => {
+  const categories = await ProductCategory.find({
+    deleted: false
+  });
+
+  const newCategories = createTreeHelper(categories);
   res.render("admin/pages/products/create" , {
-    pageTitle:"Thêm sản phẩm mới"
+    pageTitle:"Thêm sản phẩm mới",
+    categories:newCategories
   })
 }
 //[post]/admin/products/create
 module.exports.createPost =  async (req , res) => {
   try {
-    console.log(req.file);
-  if(req.file && req.file.filename){
-    req.body.thumbnail = `/uploads/${req.file.filename}`
-  }
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
@@ -172,9 +180,15 @@ module.exports.edit = async (req , res) => {
       deleted:false
     })
     if(product){
+      const categories = await ProductCategory.find({
+        deleted: false
+      });
+
+      const newCategories = createTreeHelper(categories);
       res.render("admin/pages/products/edit" , {
         pageTitle:"Sửa sản phẩm",
-        product:product
+        product:product,
+        categories: newCategories
       })
     }else{
       res.redirect(`${systemConfig.PREFIX_ADMIN}/products`)
