@@ -1,5 +1,6 @@
 const ProductCategory = require("../../models/products-category.model");
 const systemConfig = require("../../config/system");
+const createTreeHelper = require("../../helper/createTreeCategory.helper");
 
 // get/admin/products-category
 module.exports.index = async (req ,res) => {
@@ -17,8 +18,9 @@ module.exports.create = async (req ,res) => {
     const categories = await ProductCategory.find({
       deleted:false
     })
+    const newCategories = createTreeHelper(categories);
     res.render("admin/pages/products-category/create.pug" , {
-      categories:categories
+      categories:newCategories
     });
 }
 
