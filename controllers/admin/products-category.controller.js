@@ -3,7 +3,13 @@ const systemConfig = require("../../config/system");
 
 // get/admin/products-category
 module.exports.index = async (req ,res) => {
+    const productCategory = await ProductCategory.find({
+      deleted:false
+    })
     res.render("admin/pages/products-category/index.pug" , {
+      pageTitle:"Trang Danh mục sản phẩm",
+      records:productCategory
+
     });
 }
 // [GET]/admin/products-category/create
