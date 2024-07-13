@@ -4,7 +4,7 @@ mongoose.plugin(slug);
 const rolesSchema = new mongoose.Schema({
     title: String,
     description: String,
-    permission:{
+    permissions:{
         type:Array,
         default:[]
     },
