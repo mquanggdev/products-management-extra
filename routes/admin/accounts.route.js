@@ -15,4 +15,13 @@ router.post(
     uploadCloudMiddleware.uploadSingle,
     controller.createPost
   );
+router.get("/edit/:id", controller.edit);
+
+router.patch(
+  "/edit/:id",
+  upload.single('avatar'),
+  uploadCloudMiddleware.uploadSingle,
+  controller.editPatch
+);
+
 module.exports = router;
