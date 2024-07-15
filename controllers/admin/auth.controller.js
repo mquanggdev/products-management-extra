@@ -38,5 +38,11 @@ module.exports.loginPost = async (req, res) => {
   }
 
   res.cookie("token", account.token);
-  res.redirect(`/${systemConfig.prefixAdmin}/dashboard`);
+  res.redirect(`/${systemConfig.PREFIX_ADMIN}/dashboard`);
+}
+
+// [GET] /admin/auth/logout
+module.exports.logout = async (req, res) => {
+  res.clearCookie("token");
+  res.redirect(`/${systemConfig.PREFIX_ADMIN}/auth/login`);
 }
