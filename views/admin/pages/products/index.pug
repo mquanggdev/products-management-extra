@@ -6,108 +6,114 @@ include ../../mixin/box-changeStatus.pug
 include ../../mixin/box-deleteProducts.pug
 include ../../mixin/sort.pug
 block main 
+  if(role.permissions.includes("products_view"))
+    h1(class="mb-4") Danh sách sản phẩm
 
-  h1(class="mb-4") Danh sách sản phẩm
-
-  .card.mb-3
-    .card-header Bộ lọc và Tìm kiếm
-    .card-body
-      .row
-        .col-6
-          +filter(filterStatus)
-        .col-6
-          +search(keyword)
-  .card.mb-3
-    .card-header Tác Vụ
-    .card-body
-      .row
-        .col-4
-          +box-changeStatus(`/${prefixAdmin}/products/change-multiStatus`)
-        .col-4
-          +box-deleteProducts(`/${prefixAdmin}/products/delete-multiProduct`)          
-  .card.mb-3
-    .card-header Sắp xếp
-    .card-body
-      .row
-        .col-4
-          +sort()
-  .card.mb-3
-    .card-header Danh sách
-    .card-body
-      .row
-        .col-2
-            a(href=`/${prefixAdmin}/products/trash` class="btn btn-outline-success") - Thùng Rác
-        .col-2
-            a(
-              href=`/${prefixAdmin}/products/create`
-              class="btn btn-outline-success"
-            ) + Thêm mới
-    .card-body
-      table.table.table-hover.table-sm
-        thead
-          tr
-            th
-              input(
-              type="checkbox"
-              name="checkAll"
-              )
-            th STT
-            th Hình ảnh
-            th Tiêu đề
-            th Giá
-            th Vị trí
-            th Trạng thái
-            th Hành động
-
-        tbody
-          each item, index in products
+    .card.mb-3
+      .card-header Bộ lọc và Tìm kiếm
+      .card-body
+        .row
+          .col-6
+            +filter(filterStatus)
+          .col-6
+            +search(keyword)
+    if(role.permissions.includes("products_edit"))
+      .card.mb-3
+        .card-header Tác Vụ
+        .card-body
+          .row
+            .col-4
+              +box-changeStatus(`/${prefixAdmin}/products/change-multiStatus`)
+            .col-4
+              +box-deleteProducts(`/${prefixAdmin}/products/delete-multiProduct`)          
+    .card.mb-3
+      .card-header Sắp xếp
+      .card-body
+        .row
+          .col-4
+            +sort()
+    .card.mb-3
+      .card-header Danh sách
+      if(role.permissions.includes("products_create"))
+        .card-body
+          .row
+            .col-2
+                a(href=`/${prefixAdmin}/products/trash` class="btn btn-outline-success") - Thùng Rác
+            .col-2
+                a(
+                  href=`/${prefixAdmin}/products/create`
+                  class="btn btn-outline-success"
+                ) + Thêm mới
+      .card-body
+        table.table.table-hover.table-sm
+          thead
             tr
-              td
+              th
                 input(
                 type="checkbox"
-                name="checkItem"
-                value=item.id
-                ) 
-              td #{index+1}
-              td
-                img(
-                  src=item.thumbnail
-                  alt=item.title
-                  width="100px"
-                  height="auto"
+                name="checkAll"
                 )
-              td #{item.title}
-              td #{item.price}$
-              td
-                 input(
-                  link=`/${prefixAdmin}/products/change-position/${item.id}`
-                  type="number"
-                  name="position"
-                  value=item.position
-                  style="width: 60px"
-                  min="1"
-                )
-              td
-                if(item.status == "active")
-                  button(
-                    link = `/${prefixAdmin}/products/change-status/${item.id}`
-                    class="badge badge-success"
-                    button-changeStatus = "inactive"
-                    ) Hoạt động
-                else
-                  button(
-                    link = `/${prefixAdmin}/products/change-status/${item.id}`
-                    class="badge badge-danger"
-                    button-changeStatus = "active"
-                  ) Dừng hoạt động
-              td
-                a(
-                    class="btn btn-info btn-sm"
-                    href=`/${prefixAdmin}/products/detail/${item.id}`
-                  ) Chi tiết
-                a(class="btn btn-warning btn-sm"
-                href=`/${prefixAdmin}/products/edit/${item.id}`) Sửa
-                button(
-                  class="btn btn-danger btn-sm ml-1"
-                  button-delete=`/${prefixAdmin}/products/delete/${item.id}`) Xóa
-  +pagination(pagination)
+              th STT
+              th Hình ảnh
+              th Tiêu đề
+              th Giá
+              if(role.permissions.includes("products_edit"))
+                th Vị trí
+                th Trạng thái
+              th Hành động
+
+          tbody
+            each item, index in products
+              tr
+                td
+                  input(
+                  type="checkbox"
+                  name="checkItem"
+                  value=item.id
+                  ) 
+                td #{index+1}
+                td
+                  img(
+                    src=item.thumbnail
+                    alt=item.title
+                    width="100px"
+                    height="auto"
+                  )
+                td #{item.title}
+                td #{item.price}$
+                if(role.permissions.includes("products_edit"))
+                  td
+                      input(
+                      link=`/${prefixAdmin}/products/change-position/${item.id}`
+                      type="number"
+                      name="position"
+                      value=item.position
+                      style="width: 60px"
+                      min="1"
+                    )
+                if(role.permissions.includes("products_edit"))
+                  td
+                    if(item.status == "active")
+                      button(
+                        link = `/${prefixAdmin}/products/change-status/${item.id}`
+                        class="badge badge-success"
+                        button-changeStatus = "inactive"
+                        ) Hoạt động
+                    else
+                      button(
+                        link = `/${prefixAdmin}/products/change-status/${item.id}`
+                        class="badge badge-danger"
+                        button-changeStatus = "active"
+                      ) Dừng hoạt động
+                td
+                  a(
+                      class="btn btn-info btn-sm"
+                      href=`/${prefixAdmin}/products/detail/${item.id}`
+                    ) Chi tiết
+                  if(role.permissions.includes("products_edit"))
+                    a(class="btn btn-warning btn-sm"
+                    href=`/${prefixAdmin}/products/edit/${item.id}`) Sửa
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-delete=`/${prefixAdmin}/products/delete/${item.id}`) Xóa
+    +pagination(pagination)

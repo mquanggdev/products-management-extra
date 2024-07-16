@@ -1,3 +1,15 @@
 extends ../../layout/default.pug
 block main
     h1 Trang DashBoard
+
+    h2 #{accounts.fullName}
+    div #{accounts.phone}
+    div #{accounts.email}
+    img(
+        src=accounts.avatar
+        width="150px"
+    )
+
+    h2 #{role.title}
+    each item in role.permissions
+        div #{item}
