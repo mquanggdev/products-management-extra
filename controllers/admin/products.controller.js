@@ -5,6 +5,8 @@ const filterStatusHelper = require("../../helper/filterStatus.helper")
 const paginationHelper = require("../../helper/pagination.helper")
 const systemConfig = require("../../config/system.js");
 const createTreeHelper = require("../../helper/createTreeCategory.helper");
+const Account = require("../../models/accounts.model");
+const moment = require("moment");
 
 module.exports.index = async (req ,res) => {
     const find = {
@@ -44,6 +46,30 @@ module.exports.index = async (req ,res) => {
       .limit(pagination.limitItems)
       .skip(pagination.skip)
       .sort(sort)
+
+      // Lấy ra thông tin người tạo , người cập nhataj, và vào thời gian nào,...
+      for (const product of products) {
+        if(product.createdBy){
+          const accountCreated = await Account.findOne({
+            _id:product.createdBy,
+          });
+          product.createdByFullName = accountCreated.fullName
+        }else{
+          product.createdByFullName = "";
+        }
+        product.createdAtFormat = moment(product.createdAt).format("DD/MM/YYYY HH:mm:ss");
+
+        if(product.updatedBy){
+          const accountCreated = await Account.findOne({
+            _id:product.updatedBy,
+          });
+          product.updatedByFullName = accountCreated.fullName
+        }else{
+          product.updatedByFullName = "";
+        }
+
+        product.updatedAtFormat = moment(product.createdAt).format("DD/MM/YYYY HH:mm:ss");
+      }
     res.render("admin/pages/products/index.pug" , {
         pageTitle :"Danh Sach Sản Phẩm",
         products : products,
@@ -61,7 +87,8 @@ module.exports.changeStatusSingle = async (req , res) => {
     await Product.updateOne({
       _id: id
     } , {
-      status:statusChange
+      status:statusChange,
+      updatedBy:res.locals.accounts.id
     })
     req.flash('success', 'Cập nhật trạng thái thành công!');
     res.json({
@@ -84,6 +111,7 @@ module.exports.changeStatusAll = async (req , res) => {
         _id : data.id
       },{
         status:data.status,
+        updatedBy:res.locals.accounts.id
       })
       req.flash('success', 'Cập nhật trạng thái thành công!');
       res.json({
@@ -106,7 +134,8 @@ module.exports.deleteProduct = async (req , res) => {
     await Product.updateOne({
       _id : id
     },{
-      deleted:true
+      deleted:true,
+      deletedBy: res.locals.accounts.id
     })
     req.flash('success', 'Xóa sản phẩm thành công!');
     res.json({
@@ -125,7 +154,8 @@ module.exports.deleteMultiProduct = async (req , res) => {
       await Product.updateMany({
         _id : data.id
       },{
-        deleted:true
+        deleted:true,
+        deletedBy: res.locals.accounts.id
       })
       req.flash('success', 'Xóa sản phẩm thành công!');
       res.json({
@@ -142,11 +172,12 @@ module.exports.changePosition = async (req , res) => {
     try {
       const id = req.params.id;
     const position = req.body.position;
-  
+
     await Product.updateOne({
       _id: id
     }, {
-      position: position
+      position: position,
+      updatedBy:res.locals.accounts.id
     });
     res.json({
       code:200
@@ -181,6 +212,9 @@ module.exports.createPost =  async (req , res) => {
         const countProducts = await Product.countDocuments({});
         req.body.position = countProducts + 1;
       }
+
+      req.body.createdBy = res.locals.accounts.id;
+
       const newProduct = new Product(req.body);
       await newProduct.save();
       req.flash("success" ,"Thêm sản phẩm thành công");
@@ -223,7 +257,7 @@ module.exports.edit = async (req , res) => {
   }
   
 }
-//[post]/admin/products/edit/:id
+//[Patch]/admin/products/edit/:id
 module.exports.editPatch =  async (req , res) => {
   if (res.locals.role.permissions.includes("products_create")){
     try {
@@ -240,6 +274,7 @@ module.exports.editPatch =  async (req , res) => {
         const countProducts = await Product.countDocuments({});
         req.body.position = countProducts + 1;
       }
+      req.body.updatedBy = res.locals.accounts.id ;
   
       await Product.updateOne({
         _id:id,
