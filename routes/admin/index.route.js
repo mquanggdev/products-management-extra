@@ -5,7 +5,9 @@ const productsCategoryRoutes = require("./products-category.route.js");
 const rolesRoutes = require("./roles.route");
 const accountsRoutes = require("./accounts.route");
 const authRoutes = require("./auth.route");
+const profileRoutes = require("./profile.route");
 const authMiddleware = require("../../middleware/admin/auth.middleware.js");
+
 
 module.exports = (app) => {
     const PATH_ADMIN = "/" + systemConfig.PREFIX_ADMIN; // mục đích tạo ra thằng này để mai sau khách hàng có muốn đổi tên đường dẫn thì cũng có thể linh động được.Lấy nó thông qua một file trong config
@@ -15,4 +17,5 @@ module.exports = (app) => {
     app.use(PATH_ADMIN + "/roles" ,authMiddleware.requireAuth,rolesRoutes);
     app.use(PATH_ADMIN + "/accounts" ,authMiddleware.requireAuth,accountsRoutes);
     app.use(PATH_ADMIN + "/auth" , authRoutes);
+    app.use(PATH_ADMIN + "/profile",authMiddleware.requireAuth, profileRoutes);
 }
