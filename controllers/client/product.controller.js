@@ -29,6 +29,7 @@ module.exports.detail = async (req ,res) => {
         status:"active"
     })
     if(product){
+        product.priceNew = ((1 - product.discountPercentage/100) * product.price).toFixed(0);
         res.render("client/pages/products/detail.pug" , {
             pageTitle :"Trang chi tiết sản phẩm",
             product: product
