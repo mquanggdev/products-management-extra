@@ -192,11 +192,12 @@ module.exports.create = async (req , res) => {
   const categories = await ProductCategory.find({
     deleted: false
   });
-
+  const product = await Product.find({deleted:false})
   const newCategories = createTreeHelper(categories);
   res.render("admin/pages/products/create" , {
     pageTitle:"Thêm sản phẩm mới",
-    categories:newCategories
+    categories:newCategories,
+    product:product
   })
 }
 //[post]/admin/products/create

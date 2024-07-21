@@ -22,7 +22,11 @@ const productSchema = new mongoose.Schema({
         type: String,
         slug: "title",
         unique: true
-      }
+      },
+    featured: {
+      type:String,
+      default:"0"
+    }
 },
 {
     timestamps: true // Tự động thêm trường createdAt và updatedAt (https://mongoosejs.com/docs/timestamps.html)
