@@ -48,6 +48,12 @@ routeClient(app);
 routeAdmin(app);
 
 
+app.use("*" , (req , res ) => {
+    res.render("client/pages/error/404" , {
+        pageTitle : "404 Not Found" 
+    })
+})
+
 app.listen(port , () => {
     console.log(`Đang chạy cổng ${port}`);
 })
