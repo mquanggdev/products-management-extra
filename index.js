@@ -41,11 +41,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // Socket io
 const server = http.createServer(app) ;
 const io = new Server(server) ;
-
-io.on("connection" , (socket) => {
-    console.log("Có 1 người vừa kết nối " , socket.id);
-})
-
+global._io = io ; // tạo biết toàn cục tới các file controller , js bên backend
 //end socket io
 
 // Flash
