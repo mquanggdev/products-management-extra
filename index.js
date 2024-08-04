@@ -22,6 +22,11 @@ mongoose.plugin(slug);
 var methodOverride = require('method-override')
 var path = require('path');
 
+// socket init
+const http = require('http');
+const { Server } = require("socket.io");
+const { log } = require("console");
+
 
 app.set('views' , `${__dirname}/views`);
 app.set('view engine' , 'pug');
@@ -32,6 +37,16 @@ app.use(bodyParser.json())
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
+
+// Socket io
+const server = http.createServer(app) ;
+const io = new Server(server) ;
+
+io.on("connection" , (socket) => {
+    console.log("Có 1 người vừa kết nối " , socket.id);
+})
+
+//end socket io
 
 // Flash
 app.use(cookieParser('Yalidas'));
@@ -54,6 +69,6 @@ app.use("*" , (req , res ) => {
     })
 })
 
-app.listen(port , () => {
+server.listen(port , () => {
     console.log(`Đang chạy cổng ${port}`);
 })
