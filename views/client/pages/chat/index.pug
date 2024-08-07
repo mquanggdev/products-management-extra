@@ -9,10 +9,7 @@ block main
 
     .row
       .col-12
-        .chat
-          //- .inner-head
-          //-   .inner-avatar EY
-          //-   .inner-name Em Yêu
+        .chat(my-id=user.id)
           .inner-body
             each chat in chats
               div(

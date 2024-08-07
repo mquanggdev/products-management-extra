@@ -1,4 +1,6 @@
 const Product = require("../models/product.model");
+const ProductCategory = require("../models/products-category.model");
+
 module.exports = async (req , find) => {
     const pagination = {
         currentPage : 1, 
