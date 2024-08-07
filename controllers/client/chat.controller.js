@@ -24,6 +24,16 @@ module.exports.index = async (req,res) => {
         })
         // end Trả tin nhắn realtime về cho mn
       })
+
+      //CLIENT_SEND_TYPING
+      socket.on("CLIENT_SEND_TYPING" , (type) => {
+        socket.broadcast.emit("SERVER_RETURN_TYPING" , {
+          userId:userId,
+          fullname:fullname,
+          type:type
+        })
+      })
+      // END CLIENT_SEND_TYPING
     });
     
 
