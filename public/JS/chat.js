@@ -108,6 +108,7 @@ if(formChat) {
     const parentElement = document.querySelector(".chat .inner-body");
     parentElement.insertBefore(div,elementListTyping);
     bodyChat.scrollTop = bodyChat.scrollHeight; // nếu mà áp dụng cho người chat thôi thì cho lên trên phần client-send-message
+      new Viewer(div);
   })
 //end server_return_message
 
@@ -140,3 +141,10 @@ if(buttonIcon){
   });
 }
 // end show popup icon
+
+
+// preview anh
+if(bodyChat){
+  new Viewer(bodyChat);
+}
+// end preview

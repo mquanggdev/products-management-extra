@@ -11,6 +11,7 @@ html(lang="en")
             type="text/css"
             href="https://unpkg.com/file-upload-with-preview/dist/style.css"
             )
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css")
     body
         include ../partials/header.pug
         block main
@@ -18,7 +19,8 @@ html(lang="en")
         script(src="/socket.io/socket.io.js")
         script(src="/JS/script.js")
         script(type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js")
-        script(src="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.iife.js") 
+        script(src="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.iife.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js") 
         script(type="module" src="/JS/chat.js") 
         script(src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js")
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js")
