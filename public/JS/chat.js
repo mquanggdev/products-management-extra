@@ -46,15 +46,24 @@ socket.on("SERVER_RETURN_TYPING" , (data) => {
 // CLIENT_SEND_MESSAGE
 const formChat = document.querySelector(".chat .inner-form");
 if(formChat) {
+  const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-images',{
+    multiple:true,
+    maxFileCount:6
+  });
+  
   formChat.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const content = event.target.content.value;
-    if(content) {
+    const images = upload.cachedFileArray;
+    
+    if(content || images.length > 0) {
       socket.emit("CLIENT_SEND_MESSAGE", {
-        content: content
+        content: content,
+        images:images
       });
       event.target.content.value = "";
+      upload.resetPreviewPanel();
       socket.emit("CLIENT_SEND_TYPING" , "hidden");
     }
   })
@@ -67,16 +76,33 @@ if(formChat) {
     const myIdElement = document.querySelector("[my-id]");
     const myId = myIdElement.getAttribute("my-id");
     let htmFullName = "" ;
+    let htmlContent = "";
+    let htmlImages = "";
+
     if (myId == data.userId) {
       div.classList.add("inner-outgoing");
     }else{
       div.classList.add("inner-incoming");
       htmFullName=`<div class="inner-name">${data.fullname}</div>`
     }
-    
+    if(data.content) {
+      htmlContent =`<div class="inner-content">${data.content}</div>`
+    }
+    if(data.images.length > 0){
+      htmlImages += `<div class="inner-images">`
+     
+      for(const image in data.images){
+        htmlImages += `<img src="${image}">`
+      }
+
+        htmlImages += `
+        </div>
+      `;
+    }
     div.innerHTML = `
       ${htmFullName}
-      <div class="inner-content">${data.content}</div>
+      ${htmlContent}
+      ${htmlImages}
     `
 
     const parentElement = document.querySelector(".chat .inner-body");
