@@ -54,6 +54,12 @@ module.exports = (req,res) => {
                 userIdB : userIdB,
                 infoA : infoA
             })
+
+            // lấy id của a gửi về cho b
+            socket.broadcast.emit("SERVER_RETURN_ID_ACCEPT_FRIEND" ,{
+                userIdA : userIdA ,
+                userIdB : userIdB
+            })
         })   
         // end client_add_friend
 
