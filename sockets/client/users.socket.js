@@ -99,6 +99,11 @@ module.exports = (req,res) => {
                 length : infoB.acceptFriends.length ,
                 userId : userIdB
             })
+            // Trả về id của thằng nhận về cho thằng gửi
+            socket.broadcast.emit("SERVER_RETURN_ID_CANCEL_FRIEND" , {
+                userIdA : userIdA ,
+                userIdB : userIdB
+            })
         })   
         // end Client_cancel_friend
 
