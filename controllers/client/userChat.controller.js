@@ -81,7 +81,7 @@ const users = await User.find({
   _id: { $in: friendsListId },
   status: "active",
   deleted: false
-}).select("id avatar fullName");
+}).select("id avatar fullName statusOnline");
 
 res.render("client/pages/userChat/friends", {
   pageTitle: "Danh sách bạn bè",
