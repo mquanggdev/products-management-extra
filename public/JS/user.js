@@ -63,3 +63,13 @@ if(listBtnAcceptFriend.length > 0) {
     })
 }
 // end Chức năng chấp nhận kết bạn
+
+
+// server return length accept friend
+socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND" , (data) => {
+    const bageUsersAccept = document.querySelector(`[badge-users-accept="${data.userId}"]`);
+    if (bageUsersAccept) {
+        bageUsersAccept.innerHTML = data.length;
+    }
+})
+// end server return length accept friend

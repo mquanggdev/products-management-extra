@@ -36,6 +36,15 @@ module.exports = (req,res) => {
                     }
                 })
             }
+
+            // trả về cho ông được nhận lời mời độ dài của mục acceptFriends
+            const infoB = await User.findOne({
+                _id : userIdB
+            });
+            socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND" , {
+                length : infoB.acceptFriends.length ,
+                userId : userIdB
+            })
         })   
         // end client_add_friend
 
