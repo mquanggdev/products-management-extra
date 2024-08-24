@@ -5,12 +5,16 @@ const streamUpload = require("../../helper/streamUpload.helper");
 module.exports = (req,res) => {
     const userId = res.locals.user.id ;
     const fullname = res.locals.user.fullName;
+    const roomChatId = req.params.roomChatId ;
 
     _io.once("connection" , (socket) => {
+      socket.join(roomChatId);
+
         socket.on("CLIENT_SEND_MESSAGE" ,async (data) => {
             const chatData = {
               userId : userId,
               content:data.content,
+              roomChatId : roomChatId
             }
             const linkImages = [] ;
             for (const image of data.images) {
@@ -27,7 +31,7 @@ module.exports = (req,res) => {
   
   
             // Trả tin nhắn realtime về cho mn
-          _io.emit("SERVER_RETURN_MESSAGE",{
+          _io.to(roomChatId).emit("SERVER_RETURN_MESSAGE",{
             userId:userId,
             fullname:fullname,
             content:data.content,
@@ -38,7 +42,7 @@ module.exports = (req,res) => {
   
         //CLIENT_SEND_TYPING
         socket.on("CLIENT_SEND_TYPING" , (type) => {
-          socket.broadcast.emit("SERVER_RETURN_TYPING" , {
+          socket.broadcast.to(roomChatId).emit("SERVER_RETURN_TYPING" , {
             userId:userId,
             fullname:fullname,
             type:type
