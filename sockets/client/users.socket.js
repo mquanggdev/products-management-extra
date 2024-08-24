@@ -1,4 +1,5 @@
 const Chat = require("../../models/chat.model");
+const RoomChat = require("../../models/rooms-chat.model")
 const User = require("../../models/user.model");
 
 module.exports = (req,res) => {
@@ -153,6 +154,24 @@ module.exports = (req,res) => {
 
         //Client_accept_friend
         socket.on("CLIENT_ACCEPT_FRIEND" , async (userIdB) => {
+            // tạo phòng chat chung
+            try{
+                const roomChat = new RoomChat({
+                    typeRoom:"friend",
+                    users : [
+                        {
+                            userId : userIdA,
+                            role : "supperAdmin"
+                        },{
+                            userId : userIdB,
+                            role : "supperAdmin"
+                        }
+                        
+                    ]
+                })
+                await roomChat.save() ;
+            
+            
             // Thêm userId và roomChatId của thằng gửi vào FriendList của thằng được nhận
             // Xóa id của thằng gửi đến acceptFriends của thằng đc gửi
             const existUserIdB = await User.findOne({
@@ -167,7 +186,7 @@ module.exports = (req,res) => {
                     $push: {
                         friendsList: {
                             userId : userIdB ,
-                            roomChatId: ""
+                            roomChatId: roomChat.id
                         }
                     },
                     $pull : {
@@ -191,7 +210,7 @@ module.exports = (req,res) => {
                     $push: {
                         friendsList: {
                             userId : userIdA ,
-                            roomChatId: ""
+                            roomChatId: roomChat.id
                         }
                     }, $pull : {
                         requestFriends : userIdA
@@ -199,7 +218,13 @@ module.exports = (req,res) => {
                 }
                 )
             }
-        })   
+        }
+        catch(e) {
+            console.log(e);
+        }
+           
         // end Client_accept_friend
-    });
+          });
+    })
+    
 }

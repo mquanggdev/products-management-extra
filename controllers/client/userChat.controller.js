@@ -82,6 +82,10 @@ const users = await User.find({
   status: "active",
   deleted: false
 }).select("id avatar fullName statusOnline");
+users.forEach(user => {
+  const infoUser = friendsList.find(friend => friend.userId == user.id)
+  user.roomChatId = infoUser.roomChatId;
+})
 
 res.render("client/pages/userChat/friends", {
   pageTitle: "Danh sách bạn bè",
