@@ -5,8 +5,14 @@ const User = require("../../models/user.model");
 
 // [GET] /rooms-chat/
 module.exports.index = async (req, res) => {
+  const userId = res.locals.user.id;
+  const listRoomChat = await RoomChat.find({
+    typeRoom: "group",
+    "users.userId": userId
+  });
     res.render("client/pages/rooms-chat/index", {
       pageTitle: "Danh sách phòng",
+      listRoomChat: listRoomChat
     });
   };
 
@@ -31,8 +37,10 @@ module.exports.create = async (req, res) => {
 // [POST] /rooms-chat/create
 module.exports.createPost = async (req, res) => {
   const title = req.body.title;
-  const usersId = req.body.usersId;
-
+  let usersId = req.body.usersId;
+  if (!Array.isArray(usersId)) {
+    usersId = [usersId]; // Chuyển giá trị đơn thành mảng
+  }
   const dataRoomChat = {
     title: title,
     typeRoom: "group",
